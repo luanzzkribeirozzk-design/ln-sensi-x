@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <item name="colorPrimary">#9D4EDD</item>
+        <item name="colorPrimaryDark">#151718</item>
+        <item name="android:windowBackground">#151718</item>
+    </style>
+</resources>
