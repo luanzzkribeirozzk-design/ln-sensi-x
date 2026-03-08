@@ -29,7 +29,7 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
-      # 3. Java 17
+      # 3. Java 17 (Necessário para Expo 54 / RN 0.81)
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
@@ -40,13 +40,13 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 5. Instalar dependências npm
+      # 5. Instalar dependências npm (com legacy-peer-deps para evitar conflitos)
       - name: Install npm dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       # 6. Expo prebuild (gera o código nativo Android)
       - name: Expo Prebuild
-        run: npx expo prebuild --platform android --clean
+        run: npx expo prebuild --platform android --clean --no-install
         env:
           EXPO_NO_TELEMETRY: 1
 
@@ -100,26 +100,3 @@ jobs:
           name: LN-SENSI-X-APK-${{ github.event.inputs.build_type }}
           path: output/*.apk
           retention-days: 30
-
-      # 12. Release automática
-      - name: Create GitHub Release
-        if: ${{ github.event.inputs.build_type == 'release' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.0.4-local-${{ github.run_number }}
-          name: "LN SENSI X v1.0.4 Release #${{ github.run_number }}"
-          body: |
-            ## LN SENSI X - APK Release
-
-            Build gerado localmente via Gradle no GitHub Actions.
-
-            ### Como instalar:
-            1. Baixe o `ln-sensi-x-release.apk`
-            2. Ative **Fontes desconhecidas** no Android
-            3. Instale o APK
-            4. Conceda permissão de **Sobreposição sobre outros apps**
-          files: output/ln-sensi-x-release.apk
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
